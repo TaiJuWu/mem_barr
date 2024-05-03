@@ -13,6 +13,7 @@ static void* thread1(void *arg)
     while(1) {
         pthread_barrier_wait(&barr);
         x = 1;    // store
+        __asm__ __volatile__("mfence" ::: "memory");
         r1 = y;   // load
         pthread_barrier_wait(&barr_end);
     }
@@ -25,6 +26,7 @@ static void* thread2(void *arg)
     while (1) {
         pthread_barrier_wait(&barr);
         y = 1;   // store
+        __asm__ __volatile__("mfence" ::: "memory");
         r2 = x;  // load
         pthread_barrier_wait(&barr_end);
     }
